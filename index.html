@@ -1,1 +1,268 @@
-<audio src="" controls></audio>
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Women's Day | दिव्य शक्ति</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;700&family=Yatra+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --glass: rgba(0, 0, 0, 0.8);
+            --gold: #FFD700;
+            --silver: #C0C0C0;
+            --white: #ffffff;
+            --pink: #ff85a2;
+            --blue: #a2d2ff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body, html {
+            width: 100%; height: 100%;
+            font-family: 'Mukta', sans-serif;
+            background: #000;
+            overflow: hidden;
+            display: flex;            justify-content: center;
+            align-items: center;
+        }
+
+        /* Background Dynamic Color Shift */
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: linear-gradient(45deg, var(--white), var(--pink), var(--blue));
+            background-size: 400% 400%;
+            opacity: 0.12;
+            animation: colorFlow 25s ease infinite;
+        }        @keyframes colorFlow {
+            0% { background-position: 0% 50%; }            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Particle Canvas */
+        #particleCanvas {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+
+        /* Glassmorphic Card */
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 35px;
+            width: 90%;            max-width: 500px;
+            padding: 45px;
+            text-align: center;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.9);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Slider */
+        .slider-wrapper { overflow: hidden; }
+        .slides {
+            display: flex;            transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+        .slide { min-width: 100%; padding: 0 5px; }
+
+        h2 {
+            font-family: 'Yatra One', cursive;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 35px;
+            line-height: 1.4;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 18px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: 0.4s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        /* Final Message */
+        #final-screen { display: none; }
+        .wish-text {
+            font-family: 'Yatra One', cursive;
+            font-size: 2.5rem;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+            margin-bottom: 15px;
+        }
+        .blessing {
+            font-size: 1.4rem;
+            color: var(--gold);
+            margin: 20px 0;            font-weight: bold;
+        }
+
+        /* Click Symbols */
+        .click-effect {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            font-size: 2rem;
+            animation: rise 1.2s ease-out forwards;
+        }
+        @keyframes rise {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+            100% { transform: translate(-50%, -150px) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body onclick="handleInteraction(event)">
+
+    <div class="bg-overlay"></div>
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Devotional Maa Durga Music -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.youtube.com/watch?v=0EVS6f7xLcQ" type="audio/mpeg">
+        <!-- Replace with: https://your-link.com/durga_stotram.mp3 -->
+    </audio>
+
+    <div class="card">
+        <div id="quiz-section">
+            <div class="slider-wrapper">
+                <div class="slides" id="slideTrack">
+                    <div class="slide">
+                        <h2>क्या आप अपने भीतर माँ दुर्गा का अजेय साहस महसूस करती हैं? ✨</h2>
+                        <button class="btn" onclick="nextSlide(1)">हाँ, मैं शक्ति हूँ 🙏</button>
+                        <button class="btn" onclick="nextSlide(1)">सदा ही 🚩</button>
+                    </div>
+                    <div class="slide">
+                        <h2>क्या आपकी ममता और शक्ति ही इस सृष्टि का आधार है? 🔱</h2>
+                        <button class="btn" onclick="nextSlide(2)">जी बिल्कुल ✨</button>
+                        <button class="btn" onclick="nextSlide(2)">यही मेरा स्वरूप है 🙏</button>
+                    </div>
+                    <div class="slide">
+                        <h2>क्या आप आज गर्व से अपनी दिव्य पहचान स्वीकार करती हैं? 🕉️</h2>
+                        <button class="btn" onclick="complete()">अहं ब्रह्मास्मि 🚩</button>
+                        <button class="btn" onclick="complete()">सत्य वचन ✨</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="final-screen">
+            <h1 class="wish-text">महिला दिवस की शुभकामनाएँ!</h1>
+            <p class="blessing">"सर्वमंगल मांगल्ये शिवे सर्वार्थ साधिके..."</p>
+            <p style="color: #fff; opacity: 0.8; line-height: 1.6;">
+                जहाँ नारी की पूजा होती है, वहाँ देवताओं का वास होता है।<br>
+                आप अदम्य साहस और ममता की साक्षात् मूरत हैं। ❤️
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        const audio = document.getElementById('bgMusic');
+        let particles = [];
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.speedY = (Math.random() - 0.5) * 0.4;
+                this.color = Math.random() > 0.5 ? '#FFD700' : '#C0C0C0';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 150; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        function handleInteraction(e) {
+            if (audio.paused) audio.play();
+            const symbols = ['🪷', '🔱', '🚩', '🌸', '✨'];
+            const div = document.createElement('div');
+            div.className = 'click-effect';
+            div.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            div.style.left = e.clientX + 'px';
+            div.style.top = e.clientY + 'px';
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 1200);
+        }
+
+        function nextSlide(idx) {
+            document.getElementById('slideTrack').style.transform = `translateX(-${idx * 100}%)`;
+        }
+
+        function complete() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('final-screen').style.display = 'block';
+            
+            // Pushpa Varsha (Flower Shower)
+            const duration = 15 * 1000;            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,                    origin: { x: 0 },
+                    colors: ['#ff007f', '#ffffff', '#ffd700', '#ffb6c1']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff007f', '#ffffff', '#ffd700', '#ffb6c1']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+    </script>
+</body>
+</html>
